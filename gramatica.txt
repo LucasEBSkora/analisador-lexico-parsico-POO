@@ -1,0 +1,70 @@
+ε representa uma string vazia (nulo)
+
+<programa> :: = <declaracao> <programa> | <EOF>
+
+<declaracao> ::= <decl_classe> | <decl_funcao> | <decl_var> | <statement>
+
+<decl_classe> :: = classe identificador "{" <corpo_classe> "}"
+                  | classe ":" <parametros> identificador "{" <corpo_classe> "}"
+
+<corpo_classe> ::= <corpo_funcao> <corpo_classe> | <corpo_var> <corpo_classe> | ε
+
+<parametros> ::= identificador | identificador "," <parametros>
+
+<decl_funcao> ::= funcao <corpo_funcao>
+
+<corpo_funcao> ::= identificador "(" ")" <bloco>
+                 | identificador "(" <parametros> ")" <bloco>
+
+<bloco> ::= "{" <corpo_bloco> "}"
+<corpo_bloco> ::= <declaracao> <corpo_bloco> | ε
+
+<decl_var> ::= seja <corpo_var>
+
+<corpo_var> ::= identificador | identificador "=" <expressao>
+
+<statement> ::= <expr_stmt> | <enquanto_stmt> | <se_stmt> | <retornar_stmt> | <bloco>
+
+<expr_stmt> :: = <expressao> ";"
+<enquanto_stmt> ::= enquanto "(" <expressao> ")" <statement>
+
+<se_stmt> ::= se "(" <expressao> ")" <statement> else <statement>
+            | se "(" <expressao> ")" <statement> 
+
+<retornar_stmt> ::= retornar ";" | retornar <expressao> ";"
+
+<expressao> ::= <atribuicao>
+
+<atribuicao> ::= <ou_logico> | <chamadas> <identificador> "=" <atribuicao>
+
+<chamadas> ::= <chamada> "." | ε
+
+<ou_logico> ::= <e_logico> | <e_logico> "|" <ou_logico>
+
+<e_logico> ::= <igualdade> | <igualdade> "&" <e_logico>
+
+<igualdade> ::= <comparacao> | <comparacao> <op_ig> <igualdade>
+<op_ig> ::= "==" | "!="
+
+<comparacao> ::= <adicao> | <adicao> <op_comp> <comparacao>
+<op_comp> ::= ">=" | "<=" |">" | "<"
+
+<adicao> ::= <multiplicacao> | <multiplicacao> <op_ad> <adicao>
+<op_ad> ::= "+" | "-"
+
+<multiplicacao> ::= <unario> | <unario> <op_mul> <multiplicacao>
+<op_mul> ::= "*" | "/"
+
+<unario> ::= <chamada> | "!" <unario> | "-" <unario>
+
+<chamada> ::= <primario> <funcao_ou_atributo>
+
+<funcao_ou_atributo> ::= ε
+                       | "(" ")" <funcao_ou_atributo>
+                       | "(" <argumentos> ")" <funcao_ou_atributo>
+                       | "." identificador <funcao_ou_atributo>                 
+
+<argumentos> ::= <expressao> "," <argumentos> | <expressao>
+
+<primario> ::= acesso | literal_numerico | literal_texto | "verdadeiro" | "falso" | "nulo"
+             | identificador | "isso" | "super" "." identificador | "(" <expressao> ")"

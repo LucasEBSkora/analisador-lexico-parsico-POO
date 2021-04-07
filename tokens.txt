@@ -1,0 +1,14 @@
+Existiram o os seguintes tokens na gramática:
+identificadores:
+identificador -> (_|[a-z]|[A-Z])(_|[a-z]|[A-Z]|[0-9])*\b
+literal_numerico -> [0-9]+(.[0-9]+)?
+literal_texto -> ".*"
+
+
+Tokens fixos de mais de um caractere, como:
+"se", "senao", "funcao", "seja", "retornar", "enquanto", "verdadeiro", "falso", "nulo", "classe", "eu", "super",
+"!=", "<=", ">=", "==",
+*Tokens de um caractere que são representados por si mesmos: 
+  '(', ')', ';', '{', '}', '+', '-', '*', '/', '=', '<', '>', '!', '&', '|', ':', '.', ','
+
+e o token EOF, que é adicionado no final da leitura.

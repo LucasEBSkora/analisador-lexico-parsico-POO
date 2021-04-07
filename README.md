@@ -1,2 +1,2 @@
 # analisador-lexico-parsico-POO
-Primeiro projeto para a disciplina de Paradigmas de Programação: Um analisador léxico/sintático para uma linguagem de programação hipotética
+Primeiro projeto para a disciplina de Paradigmas de Programação: Um analisador léxico/sintático para a gramática de uma linguagem de programação hipotética descrita nos arquivos "tokens.txt" e "gramatica.txt"
