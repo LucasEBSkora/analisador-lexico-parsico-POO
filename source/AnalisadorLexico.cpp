@@ -33,7 +33,6 @@ const Token AnalisadorLexico::getProximo()
 const Token AnalisadorLexico::inicio()
 {
   lexema = std::stringstream();
-  // std::cout << "primeiro caractere:" << atual << std::endl;
   switch (atual)
   {
   case '"':
@@ -45,6 +44,7 @@ const Token AnalisadorLexico::inicio()
   case 'r':
     return tentar("etornar", retornar);
   case 'e':
+
     return prefixo_e();
   case 'v':
     return tentar("erdadeiro", verdadeiro);
@@ -120,7 +120,7 @@ const Token AnalisadorLexico::prefixo_s()
   if (atual == 'e')
     return prefixo_se();
   if (atual == 'u')
-    return tentar("uper", super);
+    return tentar("per", super);
   return id();
 }
 
@@ -147,10 +147,9 @@ const Token AnalisadorLexico::prefixo_f()
 
 const Token AnalisadorLexico::prefixo_e()
 {
+  if (fonte.peek() == 'n')
+    return tentar("nquanto", enquanto);
   avancar();
-  std::cout << "atual: " << atual << std::endl;
-  if (atual == 'n')
-    tentar("quanto", enquanto);
   if (atual == 'u' && !alfanumerico(fonte.peek()))
     return gerarComTipo(eu);
   return id();
