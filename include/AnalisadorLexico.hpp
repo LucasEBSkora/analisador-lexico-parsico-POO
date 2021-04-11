@@ -13,11 +13,12 @@ private:
   unsigned int nLinha;
   std::stringstream lexema;
   char atual;
+  Token lookaheadToken;
 
 public:
   AnalisadorLexico(std::ifstream &arquivoFonte);
   const Token getProximo();
-
+  const Token& lookahead() const;
 private:
   //utilidades
   bool avancar();

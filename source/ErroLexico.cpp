@@ -1,10 +1,13 @@
 #include "ErroLexico.hpp"
 
-ErroLexico::ErroLexico(std::string msg, char caractere, unsigned nLinha) : mensagem{msg}, caractere{caractere}, nLinha{nLinha} {}
+#include <sstream>
 
-std::ostream &operator<<(std::ostream &out, const ErroLexico &e)
+ErroLexico::ErroLexico(std::string msg, char caractere, unsigned nLinha) : Erro(msg), caractere{caractere}, nLinha{nLinha} {}
+
+std::string ErroLexico::comoString() const
 {
-  out << "[Linha " << e.nLinha << "] Erro no caractere '"
-      << e.caractere << "': " << e.mensagem;
-  return out;
+  std::stringstream ss;
+  ss << "[Linha " << nLinha << "] Erro no caractere '"
+     << caractere << "': " << mensagem;
+  return ss.str();
 }

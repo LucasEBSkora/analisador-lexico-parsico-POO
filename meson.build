@@ -6,6 +6,8 @@ src = [
   'source/Token.cpp',
   'source/AnalisadorLexico.cpp',
   'source/ErroLexico.cpp',
+  'source/AnalisadorSintatico.cpp',
+  'source/ErroSintatico.cpp',
 ]
 
 incdir = include_directories('include')

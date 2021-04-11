@@ -4,7 +4,9 @@
 #include <fstream>
 
 #include "AnalisadorLexico.hpp"
-#include "ErroLexico.hpp"
+#include "AnalisadorSintatico.hpp"
+
+#include "Erro.hpp"
 
 ProcessadorTexto::ProcessadorTexto(const char *caminho) : fonte{caminho} {}
 
@@ -16,19 +18,15 @@ int ProcessadorTexto::executar()
   }
 
   AnalisadorLexico lex = AnalisadorLexico(fonte);
-  
-  Token token = lex.getProximo();
-  while (token.getTipo() != TipoToken::eof)
+
+  AnalisadorSintatico sin = AnalisadorSintatico(lex);
+  try
   {
-    std::cout << token << std::endl;
-    try {
-
-    token = lex.getProximo();
-    } catch(ErroLexico e) {
-      std::cout << e << std::endl;
-      token = lex.getProximo();
-    }
+    sin.analisar();
   }
-
+  catch (Erro* e)
+  {
+    std::cout << *e << std::endl;
+  }
   return 0;
 }

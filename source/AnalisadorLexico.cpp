@@ -4,13 +4,16 @@
 
 #include "ErroLexico.hpp"
 
-AnalisadorLexico::AnalisadorLexico(std::ifstream &arquivoFonte) : fonte{arquivoFonte}, nLinha{1}
+AnalisadorLexico::AnalisadorLexico(std::ifstream &arquivoFonte)
+    : fonte{arquivoFonte}, nLinha{1}, lookaheadToken{"", eof, 0} //inicializado com valor qualquer
 {
-  avancar();
+  atual = fonte.get();
+  getProximo();
 }
 
 const Token AnalisadorLexico::getProximo()
 {
+  Token tokenAtual = lookaheadToken;
 
   while (true)
   {
@@ -18,16 +21,15 @@ const Token AnalisadorLexico::getProximo()
     {
       ++nLinha;
       avancar();
+      continue;
     }
     else if (!(atual == ' ' || atual == '\t' || atual == '\r'))
       break;
     avancar();
   }
 
-  if (!noFim())
-    return inicio();
-  else
-    return Token("", TipoToken::eof, nLinha);
+  lookaheadToken = (noFim() ? Token("", TipoToken::eof, nLinha) : inicio());
+  return tokenAtual;
 }
 
 const Token AnalisadorLexico::inicio()
@@ -44,7 +46,6 @@ const Token AnalisadorLexico::inicio()
   case 'r':
     return tentar("etornar", retornar);
   case 'e':
-
     return prefixo_e();
   case 'v':
     return tentar("erdadeiro", verdadeiro);
@@ -100,6 +101,9 @@ const Token AnalisadorLexico::inicio()
 
 const Token AnalisadorLexico::literal_texto()
 {
+  //considera que a linha do literal é a linha onde começa
+  unsigned int n = nLinha;
+
   avancar();
   while (fonte.peek() != -1)
   {
@@ -109,8 +113,12 @@ const Token AnalisadorLexico::literal_texto()
       ++nLinha;
     avancar();
   }
+
   if (atual == '"')
-    return gerarComTipo(literalTexto);
+  {
+    avancar();
+    return Token(retornarLexema(), literalTexto, n);
+  }
   else
     throw ErroLexico("String nao terminada!", atual, nLinha);
 }
@@ -193,13 +201,19 @@ const Token AnalisadorLexico::prefixo_igual()
 }
 const Token AnalisadorLexico::literal_numerico()
 {
-  
-  while(numerico(fonte.peek())) avancar();
-  
-  if (fonte.peek() == '.') {
+
+  while (numerico(fonte.peek()))
     avancar();
-    while(numerico(fonte.peek())) avancar();
-  } 
+
+  if (numerico(atual)) throw ErroLexico("identificadores não podem começar  com números!", atual, nLinha);
+ 
+  if (fonte.peek() == '.')
+  {
+    avancar();
+    while (numerico(fonte.peek()))
+      avancar();
+    if (numerico(atual)) throw ErroLexico("identificadores não podem começar  com números!", atual, nLinha);
+  }
 
   return gerarComTipo(literalNumerico);
 }
@@ -257,4 +271,8 @@ bool AnalisadorLexico::alfabetico(char c) const
 bool AnalisadorLexico::alfanumerico(char c) const
 {
   return alfabetico(c) || numerico(c);
+}
+
+const Token& AnalisadorLexico::lookahead() const {
+  return lookaheadToken;
 }

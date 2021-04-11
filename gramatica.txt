@@ -1,6 +1,6 @@
 ε representa uma string vazia (nulo)
 
-<programa> :: = <declaracao> <programa> | <EOF>
+<programa> ::= <declaracao> <programa> | <EOF>
 
 <declaracao> ::= <decl_classe> | <decl_funcao> | <decl_var> | <statement>
 
@@ -21,23 +21,21 @@
 
 <decl_var> ::= seja <corpo_var>
 
-<corpo_var> ::= identificador | identificador "=" <expressao>
+<corpo_var> ::= identificador ";" | identificador "=" <expressao> ";"
 
 <statement> ::= <expr_stmt> | <enquanto_stmt> | <se_stmt> | <retornar_stmt> | <bloco>
 
 <expr_stmt> :: = <expressao> ";"
 <enquanto_stmt> ::= enquanto "(" <expressao> ")" <statement>
 
-<se_stmt> ::= se "(" <expressao> ")" <statement> else <statement>
+<se_stmt> ::= se "(" <expressao> ")" <statement> senao <statement>
             | se "(" <expressao> ")" <statement> 
 
 <retornar_stmt> ::= retornar ";" | retornar <expressao> ";"
 
 <expressao> ::= <atribuicao>
 
-<atribuicao> ::= <ou_logico> | <chamadas> <identificador> "=" <atribuicao>
-
-<chamadas> ::= <chamada> "." | ε
+<atribuicao> ::= <ou_logico> | <ou_logico> "=" <atribuicao>
 
 <ou_logico> ::= <e_logico> | <e_logico> "|" <ou_logico>
 
@@ -66,5 +64,5 @@
 
 <argumentos> ::= <expressao> "," <argumentos> | <expressao>
 
-<primario> ::= acesso | literal_numerico | literal_texto | "verdadeiro" | "falso" | "nulo"
-             | identificador | "isso" | "super" "." identificador | "(" <expressao> ")"
+<primario> ::= literal_numerico | literal_texto | "verdadeiro" | "falso" | "nulo"
+             | identificador | "eu" | "super" "." identificador | "(" <expressao> ")"
