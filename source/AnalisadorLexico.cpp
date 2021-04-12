@@ -124,11 +124,14 @@ const Token AnalisadorLexico::literal_texto()
 }
 const Token AnalisadorLexico::prefixo_s()
 {
-  avancar();
-  if (atual == 'e')
+  if (fonte.peek() == 'e') {
+    avancar();
     return prefixo_se();
-  if (atual == 'u')
+  }
+  if (fonte.peek() == 'u') {
+    avancar();
     return tentar("per", super);
+  }
   return id();
 }
 
@@ -145,11 +148,14 @@ const Token AnalisadorLexico::prefixo_se()
 
 const Token AnalisadorLexico::prefixo_f()
 {
-  avancar();
-  if (atual == 'u')
+  if (fonte.peek() == 'u') {
+    avancar();
     return tentar("ncao", funcao);
-  if (atual == 'a')
+  }
+  if (fonte.peek() == 'a') {
+    avancar();
     return tentar("lso", falso);
+  }
   return id();
 }
 
@@ -205,22 +211,23 @@ const Token AnalisadorLexico::literal_numerico()
   while (numerico(fonte.peek()))
     avancar();
 
-  if (numerico(atual)) throw ErroLexico("identificadores não podem começar  com números!", atual, nLinha);
+  if (!numerico(atual)) throw ErroLexico("identificadores não podem começar com números!", atual, nLinha);
  
   if (fonte.peek() == '.')
   {
     avancar();
     while (numerico(fonte.peek()))
       avancar();
-    if (numerico(atual)) throw ErroLexico("identificadores não podem começar  com números!", atual, nLinha);
+    if (!numerico(atual)) throw ErroLexico("identificadores não podem começar com números!", atual, nLinha);
   }
 
   return gerarComTipo(literalNumerico);
 }
 const Token AnalisadorLexico::id()
 {
-  while (alfanumerico(fonte.peek()))
+  while (alfanumerico(fonte.peek())) 
     avancar();
+
   return gerarComTipo(identificador);
 }
 

@@ -41,7 +41,7 @@ void AnalisadorSintatico::decl_classe()
   atual = lx.getProximo(); //consome o "classe"
   if (atual.getTipo() != identificador)
     throw ErroSintatico("esperado nome da classe", atual);
-  std::cout << atual;
+  std::cout << atual.getLexema();
   atual = lx.getProximo();
   if (atual.getTipo() == doisPontos)
   {
@@ -50,21 +50,21 @@ void AnalisadorSintatico::decl_classe()
     parametros();
   }
   consumir(chaveEsq, "abre chaves necessária após declaração de classe");
-  std::cout << "com corpo: [";
+  std::cout << " com corpo: [\n";
   while (atual.getTipo() == identificador)
   {
     TipoToken tipo_lookahead = lx.lookahead().getTipo();
     if (tipo_lookahead == parenEsq)
     {
-      std::cout << " [metodo " << std::endl;
+      std::cout << " [metodo ";
       corpo_funcao(); //método
-      std::cout << "]";
+      std::cout << "]\n";
     }
     else if (tipo_lookahead == pontoEVirgula || tipo_lookahead == atrib)
     {
-      std::cout << "atributo " << std::endl;
+      std::cout << "atributo ";
       corpo_var();
-      std::cout << "]";
+      std::cout << "]\n";
     }
     else
       throw ErroSintatico("Token inesperado!", lx.lookahead());
@@ -75,7 +75,7 @@ void AnalisadorSintatico::decl_classe()
 
 void AnalisadorSintatico::parametros()
 {
-  do
+  while (true)
   {
     if (atual.getTipo() != identificador)
       throw ErroSintatico("identificador esperado!", atual);
@@ -88,7 +88,7 @@ void AnalisadorSintatico::parametros()
       atual = lx.getProximo();
       std::cout << ", ";
     }
-  } while (true);
+  }
 }
 
 void AnalisadorSintatico::decl_funcao()
@@ -109,8 +109,8 @@ void AnalisadorSintatico::corpo_funcao()
     parametros();
     std::cout << "] ";
   }
-  consumir(parenDir, "esperava abre parenteses apos nome da funcao");
-  std::cout << "corpo: [\n";
+  consumir(parenDir, "esperava fecha parenteses apos nome da funcao");
+  std::cout << "corpo: [";
   bloco();
 }
 
@@ -193,7 +193,7 @@ void AnalisadorSintatico::se_stmt()
   std::cout << "[se ";
   consumir(parenEsq, "Esperava abre parenteses após palavra chave 'enquanto'");
   expressao();
-  consumir(parenDir, "Esperava fecha parenteses após condição da iteração");
+  consumir(parenDir, "Esperava fecha parenteses após condição");
   std::cout << " entao ";
   statement();
   if (atual.getTipo() == senao)
@@ -340,11 +340,13 @@ void AnalisadorSintatico::unario()
 {
   if (atual.getTipo() == exclamacao)
   {
+    atual = lx.getProximo();
     std::cout << "não ";
     unario();
   }
   else if (atual.getTipo() == menos)
   {
+    atual = lx.getProximo();
     std::cout << "menos ";
     unario();
   }
@@ -411,10 +413,12 @@ void AnalisadorSintatico::primario()
     consumir(ponto, "Espera ponto após 'super'.");
     std::cout << "super metodo " << atual.getLexema();
     consumir(identificador, "Espera identificador após ponto");
+    break;
   case parenEsq:
     atual = lx.getProximo();
     expressao();
     consumir(parenDir, "Fecha parenteses faltando!");
+    break;
   default:
     throw ErroSintatico("Token inesperado!", atual);
   }

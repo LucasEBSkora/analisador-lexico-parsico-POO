@@ -6,6 +6,7 @@ src = [
   'source/Token.cpp',
   'source/AnalisadorLexico.cpp',
   'source/ErroLexico.cpp',
+  'source/Erro.cpp',
   'source/AnalisadorSintatico.cpp',
   'source/ErroSintatico.cpp',
 ]

@@ -26,14 +26,14 @@ funcao multiplicar(operandos) {
     }
     
 
-    seja (divisions.isNotEmpty) {
+    se (divisions.isNotEmpty) {
       seja nums = Lista();
       seja dens = Lista();
 
       {
-        seja i = 0;
+        seja i = 0.32132141;
         enquanto (i < divisions.length()) {
-          seja f = divisions.em(i)
+          seja f = divisions.em(i);
           seja numerator = f.numerator;
           se (Tipo(numerator) == Multiplication) {
             nums.addAll(numerator.operands);
@@ -99,10 +99,10 @@ classe Multiplication : BSFunction {
 
   getApprox() 
   {
-    retornar multiply(operands.approx]);
+    retornar multiply(operands.approx);
   }
 
-  accept(FunctionVisitor visitor) {
+  accept(visitor) {
     retornar visitor.visitMultiplication(this);
   } 
 }
@@ -184,7 +184,7 @@ funcao _multiplyNumbers(operands) {
 funcao _consolidateNegatives(operands) {
   seja _negative = falso;
 
-  funcao mapear(BSFunction f) {
+  funcao mapear (f) {
     seja _op = extractFromNegative(f);
     se (_op.second) _negative = !_negative;
     retornar _op.first;
@@ -200,7 +200,7 @@ funcao _consolidateNegatives(operands) {
 
 funcao _createExponents(operands) {
   seja i = 0;
-  enquanto(i < operands.length) {
+  enquanto (i < operands.length) {
     seja f = operands.em();
 
     seja base;
